@@ -1,2 +1,4 @@
-# CW1ProgrammingLSBU2019
- CW1 Programming LSBU 2019
+Tutorial Project LSBU
+======
+
+Series of *tutorials* for Game Programming @ LSBU

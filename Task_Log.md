@@ -1,14 +1,15 @@
 # **Development Log**
 
-## *Tutorial 1: Getting Audio Data*
+## *Tutorial 1: Smooth Camera Follow*
 
 | Date     | Start | End   | Interruptions | Time (H) | Task                               |
 | -------- | ----- | ----- | ------------- | -------- | ---------------------------------- |
 | 15/10/19 | 14:20 | 14.30 | -             | 0.16     | Creating Project                   |
 | 15/10/19 | 14:30 | 14:45 | -             | 0.25     | Add Testing objects, setup scene   |
-| 15/10/19 | 14:45 | 15:15 | -             | 0.5      | Create GetAudioData Script            |
-| 15/10/19 | 15:15 | 15:30 | -             | 0.25     | Test different values for samples count and FFTWindow|
-| 16/10/19 | 19:10 | 20:10 | -             | 1.0      | Write Tutorial     |
+| 15/10/19 | 14:45 | 15:15 | -             | 0.5      | Add Movement Script                |
+| 15/10/19 | 15:15 | 15:30 | -             | 0.58     | Create Smooth Camera Follow script |
+| 16/10/19 | 18:30 | 19:10 | -             | 0.66     | Debug Jitter, Finish Project       |
+| 16/10/19 | 19:10 | 20:10 | -             | 1.0      | Write Tutorial, push on Github     |
 
 ## *Tutorial 2: Numeric Springing*
 
