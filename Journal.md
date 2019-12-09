@@ -1,6 +1,6 @@
 # **Journal Tutorials**
 
-## *Tutorial 1: Smooth Camera Follow*
+## **Tutorial 1: Smooth Camera Follow**
 
 ### 15/10/19
 
@@ -15,7 +15,7 @@ The camera follow the object to it’s center, so I added and *offset* variable,
 
 Finally, the camera movement was fluid but the object appeared to jitter, selecting `Interpolate` in the Moving object’s Rigidbody setting smoothed it’s movement perfectly.
 
-## *Tutorial 2: Numeric Springing*
+## **Tutorial 2: Numeric Springing**
 
 ### 28/10/19
 
@@ -29,7 +29,7 @@ I added the `StopAllCoroutines();` call, otherwise if the *Coroutine* was called
 
 Finally for easy use, I added a `modifScale` variable modifiable from the inspector as a factor to the `localScale` for better control.
 
-## *Tutorial 3: Dolly Zoom*
+## **Tutorial 3: Dolly Zoom**
 
 ### 07/11/19
 
@@ -45,10 +45,35 @@ Then every frame we will recalculate the *distance*, then calculate the FOV thro
 
 The effect is best achieved with a front facing camera rather than a top down view of the object.
 
-## *Tutorial 4: Animation Events*
+## **Tutorial 4: Animation Events**
 
 ### 18/11/19
 
 I could not get the proper size to work for world scale canvas. I was using a small size (5 by 5) with a regular scale of 1. That meant one 5 pixels where as big as 1 world unity, a meter. The solution was the opposite approach, a high size (what your UI in pixel would need to be, I chose $580 \times 220$) and reduce the scale to 0.005. That would insure a world space witdh of 2.9 meters ($580 \times 0.005$) and a height of 1.1 meters ($220 \times 0.005$).
 
 My first event was calling a built-in `SetTrigger` method on the animator, but as I wanted to use a *boolean*, I change it to a custom script method. An animation event can only call method with a maximum of *1* argument, so that's why it can call a Trigger (with only it's name) and not a `SetBool` (which use *name* + *true* or *false*). I created four methods, two to set the animator boolean to true and false, one to play a sound, one to play a particle effect. I set the boolean *ON* on the button click function in the *inspector*, it plays the *Pressed* animation, in the animation I have *three* events: Playing sound, playing particles, setting the boolean back to false.
+
+## **Behaviour Component: Audio Visualizer**
+
+### 08/12/19
+
+The *frequency* available to for humans to hear are from about 20 Hz to 20 kHz (20 000 Hz). The notion of *samples* is to divide this large amount into a shorter list that will check the points at a certain *interval*. The number of samples therefore is to check at every point in time the *amplitude* over the sampled *frequency*. A higher number means more precision but run slower. For our test scene, a sample count at 1024 is a good choice.
+
+Samples can be seen as *frequency resolution*, and calculate the *relative amplitude* at their point. With a 1024 array, we have a resolution of 23.4 hertz, calculated by the total *frequency* range (24kHz) divided by the sample count: 24 000 / 1024. In this tutorial we sample the relative amplitude every 23.4 hertz.
+
+The FFTWindow parameter stands for `Fast Fourier Transfer Window`, FFT being an *algorythm* to convert a signal from *original* domain to *frequency* domain. Unity have some predefined *FFTWindow* to help reduce leakage of signal across the frequency band.
+
+As I wanted to adapt the audio visualizer to only showing *three* bands, I had to recalculate the number of samples to use for every frequency band. I settled for this calculation:
+
+```c#
+    int sampleCount = (int)Mathf.Pow(3.5f, i) * 50;
+```
+
+As calculated before, every samples hold the *amplitude* over 23.4 hertz. So the first **band** will hold 50 samples(50 \* 3.5^0) which cover 1170 hertz (50 \* 23.4). The second **band** hold 175 samples (50 \* 3.5^1) which is a range of 4095 hertz. Finally the third **band** hold 612 samples, ranging 14 332 hertz.
+
+After looping through each *band* to calculate the average frequency, we multiply to a *scale* to be able to adjust the size in real time if needed.
+The movement of the *bands* was a little jarring at this point, so we added a *buffer* to smooth the movement. We now hold *three* values adjusting every frames that we can use.
+
+I decided to use a *slider* to visualize the values as it is easy to access and scale accordingly. I made sure to remove the background, the handle slide, and to uncheck *interactable*. Instead of rotating the GameObject, we can select the *direction* to *Bottom to Top*. To have the slider completely disappearing at zero, we can set its `width` to zero.
+
+From there, we only need to *duplicate* the slider twice more, making it a child of an empty *UI GameObject*, adding the *AudioData* and filling the audio source variable.
